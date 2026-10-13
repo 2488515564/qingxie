@@ -104,6 +104,17 @@ GUI 测试需要图形显示；无显示时会跳过。也可以安装 `xvfb` �
 - `tests/`：测试
 - `assets/`：图标及生成说明
 
+## 支持一下
+
+如果轻卸帮你省去了查命令、卸载软件的麻烦，欢迎请我喝杯咖啡，支持后续的功能改进和问题修复。
+
+打赏完全自愿，金额随心；你的使用、反馈和 Star，也都是对项目的支持。谢谢你！
+
+<p align="center">
+  <img src="assets/donate-wechat.jpg" width="280" alt="微信收款码：自愿支持轻卸项目">
+</p>
+<p align="center">微信扫一扫，支持轻卸的持续维护</p>
+
 ## 参考
 
 [Ubuntu APT](https://manpages.ubuntu.com/manpages/noble/man8/apt-get.8.html) · [Flatpak 命令参考](https://docs.flatpak.org/en/latest/flatpak-command-reference.html) · [Snap 数据快照](https://snapcraft.io/docs/how-to-guides/manage-snaps/create-data-snapshots/)
