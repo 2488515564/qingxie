@@ -82,6 +82,23 @@ def desktop_meta(path):
         return None
 
 
+def apt_size_bytes(text):
+    """Read Installed-Size (KiB), tolerating nonstandard unit suffixes.
+
+    Bare K/M/G/T and explicit KiB units use binary multiples; KB/MB
+    use decimal multiples. Unusable metadata must not hide other apps.
+    """
+    m = re.fullmatch(r"\s*([0-9]+(?:\.[0-9]+)?)\s*([KMGT](?:i?B)?|B)?\s*", text, re.I)
+    if not m:
+        return 0
+    number, unit = m.groups()
+    unit = (unit or "KIB").upper()
+    exponent = 0 if unit == "B" else "KMGT".index(unit[0]) + 1
+    base = 1000 if len(unit) == 2 and unit.endswith("B") else 1024
+    whole, _, fraction = number.partition(".")
+    return int(whole + fraction) * base ** exponent // (10 ** len(fraction))
+
+
 def list_apt(all_packages=False):
     fmt = "${binary:Package}\t${db:Status-Abbrev}\t${Installed-Size}\t${Version}\t${Essential}\t${Priority}\t${Protected}\n"
     rows = run(["/usr/bin/dpkg-query", "-W", "-f=" + fmt]).stdout
@@ -91,7 +108,7 @@ def list_apt(all_packages=False):
         if len(cols) != 7 or not cols[1].startswith("ii"):
             continue
         name, _, size, version, essential, priority, protected = cols
-        packages[name] = App(name, name, "APT", version, int(size or 0) * 1024,
+        packages[name] = App(name, name, "APT", version, apt_size_bytes(size),
                              protected=protected_package(name, essential, priority, protected))
     files = sorted(Path("/usr/share/applications").glob("*.desktop"))
     owners = {}

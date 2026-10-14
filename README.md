@@ -4,7 +4,7 @@
 
 一个简洁直观的 Ubuntu 软件卸载工具。找到软件，查看卸载范围，再确认执行。
 
-基于 Python 3 和 GTK 3，支持 APT、Snap、Flatpak。当前版本：**0.1.4**。
+基于 Python 3 和 GTK 3，支持 APT、Snap、Flatpak。当前版本：**0.1.6**。
 
 [下载安装包或免安装版](https://github.com/2488515564/qingxie/releases/latest) · [反馈问题](https://github.com/2488515564/qingxie/issues)
 
@@ -21,17 +21,17 @@
 
 ### DEB 安装包
 
-在 [Releases](https://github.com/2488515564/qingxie/releases/latest) 下载 `qingxie_0.1.4_all.deb`，用系统软件安装器打开，或在下载目录运行：
+在 [Releases](https://github.com/2488515564/qingxie/releases/latest) 下载 `qingxie_0.1.6_all.deb`，用系统软件安装器打开，或在下载目录运行：
 
 ```bash
-sudo apt install ./qingxie_0.1.4_all.deb
+sudo apt install ./qingxie_0.1.6_all.deb
 ```
 
 然后从应用菜单搜索“轻卸”。升级时安装新版 DEB 即可。
 
 ### 免安装版
 
-下载 `qingxie-0.1.4-portable.tar.gz` 并完整解压，在解压后的 `qingxie` 文件夹中运行：
+下载 `qingxie-0.1.6-portable.tar.gz` 并完整解压，在解压后的 `qingxie` 文件夹中运行：
 
 ```bash
 ./启动轻卸.sh
@@ -43,7 +43,7 @@ sudo apt install ./qingxie_0.1.4_all.deb
 sudo apt install python3-gi gir1.2-gtk-3.0 python3-apt pkexec
 ```
 
-首次运行会创建当前用户的 `~/.local/share/applications/qingxie-portable.desktop`（尊重 `XDG_DATA_HOME`），用于任务栏图标与应用菜单关联，无需管理员权限。移动程序目录后重新运行启动脚本会更新路径。删除免安装版时，可一并删除此入口。
+首次运行会创建当前用户的 `~/.local/share/applications/qingxie-portable.desktop`（尊重 `XDG_DATA_HOME`），仅用于任务栏图标关联，设置 `NoDisplay=true`，不会在应用菜单中添加免安装版图标，无需管理员权限。旧版本创建的可见入口会在启动新版时自动隐藏。移动程序目录后重新运行启动脚本会更新路径。记录保留以支持多窗口和异常退出后的图标关联；删除免安装版时，可一并删除此记录。
 
 请在 Ubuntu 图形桌面中以普通用户运行；APT 和 Snap 卸载会通过系统授权窗口请求管理员权限。轻卸不保存密码。
 
@@ -93,7 +93,7 @@ python3 -m unittest discover -s tests -v
 
 GUI 测试需要图形显示；无显示时会跳过。也可以安装 `xvfb` 后运行 `xvfb-run -a python3 -m unittest discover -s tests -v`。
 
-26 项测试覆盖卸载计划与组件保护、模拟执行、图标缩放、桌面入口及特殊路径处理。测试不会执行真实卸载。本机只读扫描和 APT 卸载计划已验证；Snap/Flatpak 真实事务仍需在一次性虚拟机中进一步验收。
+29 项测试覆盖卸载计划与组件保护、模拟执行、图标缩放、桌面入口及特殊路径处理。测试不会执行真实卸载。本机只读扫描和 APT 卸载计划已验证；Snap/Flatpak 真实事务仍需在一次性虚拟机中进一步验收。
 
 ## 项目结构
 

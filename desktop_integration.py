@@ -1,4 +1,4 @@
-"""Per-user desktop association for portable launches; no system installation."""
+"""Hidden per-user icon association for portable launches; no menu shortcut."""
 import os
 from pathlib import Path
 import tempfile
@@ -30,6 +30,9 @@ def register_portable(root=ROOT, data_home=None):
     content = "\n".join([
         "[Desktop Entry]", "Type=Application", "Name=轻卸（免安装版）",
         "Comment=软件卸载，清楚简单", "Terminal=false", "StartupNotify=true",
+        # Keep Wayland app-ID/icon matching without adding a launcher to menus.
+        # Do not use Hidden=true: that would disable the association itself.
+        "NoDisplay=true",
         "StartupWMClass=qingxie-portable", "Categories=System;PackageManager;",
         "X-Qingxie-Portable=true",
         "Exec=/usr/bin/python3 " + exec_arg(root / "main.py"),

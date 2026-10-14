@@ -10,7 +10,7 @@ gi.require_version("GdkPixbuf", "2.0")
 from gi.repository import GdkPixbuf
 
 source = Path(__file__).resolve().parent
-target = source / "dist/qingxie_0.1.4_all.deb"
+target = source / "dist/qingxie_0.1.6_all.deb"
 target.parent.mkdir(exist_ok=True)
 with tempfile.TemporaryDirectory(prefix="qingxie-build-") as tmp:
     root = Path(tmp)
@@ -47,7 +47,7 @@ StartupNotify=true
     control = root / "DEBIAN/control"
     control.parent.mkdir()
     control.write_text('''Package: qingxie
-Version: 0.1.4
+Version: 0.1.6
 Section: admin
 Priority: optional
 Architecture: all

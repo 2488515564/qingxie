@@ -10,7 +10,7 @@ root = Path(__file__).resolve().parent
 dist = root / "dist"
 dist.mkdir(exist_ok=True)
 subprocess.run([sys.executable, str(root / "build_deb.py")], check=True)
-archive = dist / "qingxie-0.1.4-portable.tar.gz"
+archive = dist / "qingxie-0.1.6-portable.tar.gz"
 files = ["main.py", "backend.py", "desktop_integration.py", "README.md", "CHANGELOG.md",
          "build_deb.py", "build_release.py", "启动轻卸.sh", ".gitignore"]
 files += [str(p.relative_to(root)) for folder in ("assets", "tests")
@@ -19,7 +19,7 @@ files += [str(p.relative_to(root)) for folder in ("assets", "tests")
 with tarfile.open(archive, "w:gz") as tar:
     for name in files:
         tar.add(root / name, arcname="qingxie/" + name)
-artifacts = [dist / "qingxie_0.1.4_all.deb", archive]
+artifacts = [dist / "qingxie_0.1.6_all.deb", archive]
 (dist / "SHA256SUMS").write_text("".join(
     hashlib.sha256(p.read_bytes()).hexdigest() + "  " + p.name + "\n" for p in artifacts))
 print("Release files:")
