@@ -27,6 +27,24 @@ class DesktopTests(unittest.TestCase):
             self.assertEqual(info.get_icon().get_file().get_path(), str(root / "assets/qingxie.png"))
             self.assertEqual(info.get_executable(), "/usr/bin/python3")
             self.assertEqual(path.stem, "qingxie-portable")
+            self.assertTrue(info.get_nodisplay())
+            self.assertFalse(info.should_show())
+            self.assertFalse(info.get_is_hidden())
+
+    def test_legacy_visible_entry_is_migrated_without_touching_installed_entry(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.root(directory)
+            data = Path(directory) / "data"
+            path = desktop.register_portable(root, data)
+            path.write_text(path.read_text().replace("NoDisplay=true\n", ""))
+            installed = path.with_name("qingxie.desktop")
+            original = "[Desktop Entry]\nType=Application\nName=轻卸\nExec=qingxie\n"
+            installed.write_text(original)
+            desktop.register_portable(root, data)
+            info = Gio.DesktopAppInfo.new_from_filename(str(path))
+            self.assertFalse(info.should_show())
+            self.assertTrue(info.get_nodisplay())
+            self.assertEqual(installed.read_text(), original)
 
     def test_repeated_registration_and_folder_move(self):
         with tempfile.TemporaryDirectory() as directory:

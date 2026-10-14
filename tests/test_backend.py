@@ -31,6 +31,25 @@ class Cache(dict):
 
 
 class BackendTests(unittest.TestCase):
+    def test_apt_size_metadata(self):
+        cases = {"52": 53248, "52K": 53248, " 52 KiB ": 53248,
+                 "1.5M": 1572864, "2 MB": 2000000, "2g": 2147483648,
+                 "7B": 7, "": 0, "unknown": 0, "-1": 0,
+                 "52Kjunk": 0, "1.2.3": 0}
+        for value, expected in cases.items():
+            with self.subTest(value=value):
+                self.assertEqual(b.apt_size_bytes(value), expected)
+
+    def test_apt_scan_survives_nonstandard_and_invalid_sizes(self):
+        rows = "".join(f"{name}\tii \t{size}\t1\tno\toptional\tno\n"
+                       for name, size in [("normal", "100"), ("suffix", "52K"),
+                                          ("bad", "invalid"), ("last", "20")])
+        with patch.object(b, "run", return_value=SimpleNamespace(stdout=rows)), \
+             patch.object(b.Path, "glob", return_value=[]):
+            apps = b.list_apt(all_packages=True)
+        self.assertEqual({a.id: a.size for a in apps},
+                         {"normal": 102400, "suffix": 53248, "bad": 0, "last": 20480})
+
     def test_rejects_option_and_shell_injection(self):
         for source, ident in [("APT", "--allow-remove-essential"), ("APT", "vlc;touch /tmp/x"),
                               ("APT", "vlc*"), ("Snap", "../snapd"), ("Flatpak", "--all"),
